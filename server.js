@@ -7,7 +7,7 @@ const FormData = require('form-data');
 require('dotenv').config();
 
 // Init Firebase
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 const app = express();
