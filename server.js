@@ -85,6 +85,16 @@ app.post('/api/config', async (req, res) => {
   }
 });
 
+// ROUTE : Lire config
+app.get('/api/config', async (req, res) => {
+  try {
+    const doc = await db.collection('config').doc('app_settings').get();
+    res.json(doc.data());
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ROUTE 4 : Notification
 app.post('/api/notify', async (req, res) => {
   try {
