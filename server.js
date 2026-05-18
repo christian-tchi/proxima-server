@@ -109,3 +109,33 @@ app.post('/api/notify', async (req, res) => {
 app.listen(process.env.PORT || 3000, () => 
   console.log(`✅ Proxima Server actif sur port ${process.env.PORT || 3000}`)
 );
+// ✅ TRADUCTIONS — lecture depuis Firestore
+app.get('/api/translations/:lang', async (req, res) => {
+  try {
+    const { lang } = req.params;
+    if (!['fr', 'en'].includes(lang)) {
+      return res.status(400).json({ error: 'Langue non supportée. Utilisez fr ou en.' });
+    }
+    const doc = await db.collection('translations').doc(lang).get();
+    if (!doc.exists) {
+      return res.status(404).json({ error: `Traductions ${lang} introuvables` });
+    }
+    res.json({ lang, translations: doc.data() });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ✅ TOUTES LES TRADUCTIONS
+app.get('/api/translations', async (req, res) => {
+  try {
+    const frDoc = await db.collection('translations').doc('fr').get();
+    const enDoc = await db.collection('translations').doc('en').get();
+    res.json({
+      fr: frDoc.exists ? frDoc.data() : {},
+      en: enDoc.exists ? enDoc.data() : {},
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
