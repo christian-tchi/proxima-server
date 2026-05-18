@@ -106,9 +106,6 @@ app.post('/api/notify', async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || 3000, () => 
-  console.log(`✅ Proxima Server actif sur port ${process.env.PORT || 3000}`)
-);
 // ✅ TRADUCTIONS — lecture depuis Firestore
 app.get('/api/translations/:lang', async (req, res) => {
   try {
@@ -139,3 +136,8 @@ app.get('/api/translations', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+// ✅ app.listen EN DERNIER
+app.listen(process.env.PORT || 3000, () =>
+  console.log(`✅ Proxima Server actif sur port ${process.env.PORT || 3000}`)
+);
